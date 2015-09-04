@@ -56,9 +56,8 @@ class Stack:
 
 
 class Node:
-	children = [None,None]
-	left = children[0]
-	right = children[1]
+	right = None
+	left = None
 	def __init__(self, key, left, right, parent):
 		self.key = key
 		self.left = left
@@ -71,29 +70,47 @@ class BTree:
 		self.root =  Node(key, None, None, None)
 
 	def add(self, value, parentValue):
-		for node in self.root:
-			if node.key is parentValue:
-				if node.left is None:
-					node.left = Node(value, None, None, node)
-				elif node.right is None:
-					node.right = Node(value, None, None, node)
+		def recurseAdd(self, value, parentValue, startNode):
+			if startNode is None:
+				return False
+			if startNode.key is parentValue:
+				if startNode.left is None:
+					startNode.left = Node(value, None, None, startNode.left)
+					return True
+				elif startNode.right is None:
+					startNode.right = Node(value, None, None, startNode.right)
+					return True
 				else:
 					print "Parent has two children, node not added"
+					return False
+			elif recurseAdd(self, value, parentValue, startNode.left):
+				return True
+			elif recurseAdd(self, value, parentValue, startNode.right):
+				return True
 			else:
 				"Parent not found"
+				return False
+		recurseAdd(self, value, parentValue, self.root)
 	def delete(self, value):
-		for node in self.root:
-			if (node.key is value):
-				if (node.left is None) and (node.right is None):
-					node = None
-				else:
-					print "Node not deleted, has children"
+		if (self.root.key is value):
+			if (self.root.left is None) and (self.root.right is None):
+				self.root = None
 			else:
-				print "Node not found."
+				print "Node not deleted, has children"
+		else:
+			print "Node not found."
 	def printTree(self):
-		for node in self.root:
-			print node.key
-
+		def recursePrintTree(self, node):
+			if node is None:
+				print "Node is None"
+				return
+			else:
+				print node.key
+			print "Left Node"
+			recursePrintTree(self, node.left)
+			print "Right Node"
+			recursePrintTree(self, node.right)
+		recursePrintTree(self, self.root)
 
 
 
@@ -239,7 +256,7 @@ def testBTree():
 	myBTreepig.printTree()
 
 
-#testBTree()
+testBTree()
 #testQueue()
 #testStack()
-testGraph()
+#testGraph()
