@@ -20,7 +20,6 @@ class Graph:
 			self.table[value] = []
 		else:
 			print "Vertex already exists."
-			print self.table
 
 	def addEdge(self, value1, value2):
 		if value1 in self.table:
@@ -92,13 +91,24 @@ class BTree:
 				return False
 		recurseAdd(self, value, parentValue, self.root)
 	def delete(self, value):
-		if (self.root.key is value):
-			if (self.root.left is None) and (self.root.right is None):
-				self.root = None
+		def recurseDel(self, value, node):
+			if node is None:
+				return False
+			elif (node.key is value):
+				if (node.left is None) and (node.right is None):
+					node = None
+					return True
+				else:
+					print "Node not deleted, has children"
+					return False
+			elif recurseDel(self, value, node.left):
+				return True
+			elif recurseDel(self, value, node.right):
+				return True
 			else:
-				print "Node not deleted, has children"
-		else:
-			print "Node not found."
+				print "Node not found."
+				return False
+		recurseDel(self, value, self.root)
 	def printTree(self):
 		def recursePrintTree(self, node):
 			if node is None:
@@ -106,9 +116,9 @@ class BTree:
 				return
 			else:
 				print node.key
-			print "Left Node"
+			print "Left Node to %d" % (node.key)
 			recursePrintTree(self, node.left)
-			print "Right Node"
+			print "Right Node to %d" % (node.key)
 			recursePrintTree(self, node.right)
 		recursePrintTree(self, self.root)
 
@@ -255,8 +265,11 @@ def testBTree():
 	print "Printing tree"
 	myBTreepig.printTree()
 
-
+print "\n\n\nTesting BTree\n\n\n"
 testBTree()
-#testQueue()
-#testStack()
-#testGraph()
+print "\n\n\nTesting Queue\n\n\n"
+testQueue()
+print "\n\n\nTesting Stack\n\n\n"
+testStack()
+print "\n\n\nTesting Graph\n\n\n"
+testGraph()
